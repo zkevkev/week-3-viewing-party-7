@@ -1,5 +1,9 @@
-<%= button_to "Create New User", register_path, method: :get %>
-<%= button_to "Login", login_path, method: :get %>
+<% if current_user %>
+    <%= link_to "Log Out" %>
+<% else %>
+    <%= button_to "Create New User", register_path, method: :get %>
+    <%= button_to "Login", login_path, method: :get %>
+<% end %>
 
 <section class='existing-users'>
     <p>Existing Users: </p>
