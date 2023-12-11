@@ -7,7 +7,7 @@ class UsersController <ApplicationController
     @user = User.find(params[:id])
   end 
 
-  def create 
+  def create
     user = user_params
     user[:name] = user[:name].downcase
     new_user = User.new(user)

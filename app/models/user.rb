@@ -1,7 +1,4 @@
-require 'bcrypt'
 class User < ApplicationRecord 
-  include BCrypt
-
   validates_presence_of :email, :name, :password_digest
   validates_uniqueness_of :email
   has_many :viewing_parties
