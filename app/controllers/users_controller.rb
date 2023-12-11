@@ -12,18 +12,21 @@ class UsersController <ApplicationController
     user[:name] = user[:name].downcase
     new_user = User.new(user)
     
-    if new_user.save
+    if user[:password] != user[:password_confirmation]
+      flash[:error] = "Passwords do not match"
+      redirect_to register_path
+    elsif new_user.save
       flash[:success] = "Welcome, #{new_user.name}!"
       redirect_to user_path(new_user)
     else  
       flash[:error] = new_user.errors.full_messages.to_sentence
       redirect_to register_path
-    end 
+    end    
   end 
 
   private 
 
   def user_params 
-    params.require(:user).permit(:name, :email, :password)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end 
 end 
