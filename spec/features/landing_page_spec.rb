@@ -21,25 +21,33 @@ RSpec.describe 'Landing Page' do
 
     expect(current_path).to eq(root_path)
   end 
-
-  # it 'lists out existing users' do 
-  #   user1 = User.create(name: "User One", email: "user1@test.com")
-  #   user2 = User.create(name: "User Two", email: "user2@test.com")
-
-  #   expect(page).to have_content('Existing Users:')
-
-  #   within('.existing-users') do 
-  #     expect(page).to have_content(user1.email)
-  #     expect(page).to have_content(user2.email)
-  #   end     
-  # end 
-
+  
   context 'when logged in' do
+    it "lists out existing users' emails" do 
+      user1 = User.create(name: "User One", email: "user1@test.com")
+      user2 = User.create(name: "User Two", email: "user2@test.com")
+      user3 = User.create(name: "funbucket13", email: 'user1@example.com', password: 'password123', password_confirmation: 'password123')
+      
+      visit login_path
+      
+      fill_in :email, with: user3.email
+      fill_in :password, with: user3.password
+    
+      click_on "Log In"
+
+      expect(page).to have_content('Existing Users:')
+  
+      within('.existing-users') do 
+        expect(page).to have_content(user1.email)
+        expect(page).to have_content(user2.email)
+      end     
+    end 
+
     it 'has a link to log out instead of login and create buttons' do
       user = User.create(name: "funbucket13", email: 'user1@example.com', password: 'password123', password_confirmation: 'password123')
-  
+      
       visit login_path
-    
+      
       fill_in :email, with: user.email
       fill_in :password, with: user.password
     
@@ -68,6 +76,17 @@ RSpec.describe 'Landing Page' do
       expect(page).to_not have_link("Log Out")
       expect(page).to have_button("Create New User")
       expect(page).to have_button("Login")
+    end
+
+    it '' do
+      user = User.create(name: "funbucket13", email: 'user1@example.com', password: 'password123', password_confirmation: 'password123')
+  
+      visit login_path
+    
+      fill_in :email, with: user.email
+      fill_in :password, with: user.password
+    
+      click_on "Log In"
     end
   end
 end
