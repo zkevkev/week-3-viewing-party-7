@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get '/login', to: 'users#login_form'
   post '/login', to: 'users#login'
   post '/logout', to: 'users#logout'
+  get '/dashboard', to: 'users/dashboard#index'
 
   resources :users, only: :show
 

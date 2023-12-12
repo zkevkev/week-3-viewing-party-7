@@ -11,21 +11,34 @@ RSpec.describe 'Landing Page' do
     expect(page).to have_content('Viewing Party Lite')
   end
 
-  it 'has links/buttons that link to correct pages' do 
-    click_button "Create New User"
-    
-    expect(current_path).to eq(register_path) 
-    
-    visit '/'
-    click_link "Home"
+  context 'when not logged in' do
+    it 'has links/buttons that link to correct pages' do 
+      click_button "Create New User"
+      
+      expect(current_path).to eq(register_path) 
+      
+      visit '/'
+      click_link "Home"
 
-    expect(current_path).to eq(root_path)
-  end 
+      expect(current_path).to eq(root_path)
+
+      visit '/'
+      click_button "Login"
+
+      expect(current_path).to eq(login_path)
+    end 
+
+    it 'does not allow visitor to navigate to /dashboard' do                     
+      visit '/dashboard'
+save_and_open_page
+      expect(page).to have_content('You must be logged in or registered to access your dashboard')
+    end
+  end
   
   context 'when logged in' do
     it "lists out existing users' emails" do 
-      user1 = User.create(name: "User One", email: "user1@test.com")
-      user2 = User.create(name: "User Two", email: "user2@test.com")
+      user1 = User.create(name: "User One", email: "user1@test.com", password: 'password123', password_confirmation: 'password123')
+      user2 = User.create(name: "User Two", email: "user2@test.com", password: 'password123', password_confirmation: 'password123')
       user3 = User.create(name: "funbucket13", email: 'user1@example.com', password: 'password123', password_confirmation: 'password123')
       
       visit login_path
@@ -78,15 +91,15 @@ RSpec.describe 'Landing Page' do
       expect(page).to have_button("Login")
     end
 
-    it '' do
-      user = User.create(name: "funbucket13", email: 'user1@example.com', password: 'password123', password_confirmation: 'password123')
+    # it '' do
+    #   user = User.create(name: "funbucket13", email: 'user1@example.com', password: 'password123', password_confirmation: 'password123')
   
-      visit login_path
+    #   visit login_path
     
-      fill_in :email, with: user.email
-      fill_in :password, with: user.password
+    #   fill_in :email, with: user.email
+    #   fill_in :password, with: user.password
     
-      click_on "Log In"
-    end
+    #   click_on "Log In"
+    # end
   end
 end
