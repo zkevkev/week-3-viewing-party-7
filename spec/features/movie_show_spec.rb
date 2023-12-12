@@ -10,23 +10,46 @@ RSpec.describe 'Movies Index Page' do
     end 
   end 
 
-  it 'shows all movies' do 
-    visit "users/#{@user1.id}"
+  context 'when not logged in' do
+    it 'does not allow visitor to create a viewing party' do
+      movie_1 = Movie.first
+      
+      visit "users/#{@user1.id}/movies/#{movie_1.id}"
 
-    click_button "Find Top Rated Movies"
+      click_button "Create a Viewing Party"
 
-    expect(current_path).to eq("/users/#{@user1.id}/movies")
+      expect(page).to have_content('You must be logged in or registered to create a movie party')
+    end
+  end
 
-    expect(page).to have_content("Top Rated Movies")
+  context 'when logged in' do
+    it 'shows all movies' do 
+      user = User.create(name: "funbucket13", email: 'user1@example.com', password: 'password123', password_confirmation: 'password123')
+      
+      visit login_path
+      
+      fill_in :email, with: user.email
+      fill_in :password, with: user.password
     
-    movie_1 = Movie.first
+      click_on "Log In"
 
-    click_link(movie_1.title)
+      visit "users/#{@user1.id}"
 
-    expect(current_path).to eq("/users/#{@user1.id}/movies/#{movie_1.id}")
+      click_button "Find Top Rated Movies"
 
-    expect(page).to have_content(movie_1.title)
-    expect(page).to have_content(movie_1.description)
-    expect(page).to have_content(movie_1.rating)
-  end 
+      expect(current_path).to eq("/users/#{@user1.id}/movies")
+
+      expect(page).to have_content("Top Rated Movies")
+      
+      movie_1 = Movie.first
+
+      click_link(movie_1.title)
+
+      expect(current_path).to eq("/users/#{@user1.id}/movies/#{movie_1.id}")
+
+      expect(page).to have_content(movie_1.title)
+      expect(page).to have_content(movie_1.description)
+      expect(page).to have_content(movie_1.rating)
+    end 
+  end
 end

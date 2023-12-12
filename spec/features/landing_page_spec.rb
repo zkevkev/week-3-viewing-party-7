@@ -30,7 +30,7 @@ RSpec.describe 'Landing Page' do
 
     it 'does not allow visitor to navigate to /dashboard' do                     
       visit '/dashboard'
-save_and_open_page
+
       expect(page).to have_content('You must be logged in or registered to access your dashboard')
     end
   end
